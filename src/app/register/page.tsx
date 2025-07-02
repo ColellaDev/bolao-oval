@@ -53,9 +53,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-zinc-900 rounded-xl p-8 shadow-lg">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">Cadastro</h1>
+    
+    <main className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-surface rounded-xl p-8 shadow-lg">
+        
+        <h1 className="text-3xl font-bold text-text mb-6 text-center">Cadastro</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
@@ -63,7 +65,7 @@ export default function RegisterPage() {
               type="text"
               placeholder="Nome"
               {...register('name')}
-              className="w-full bg-zinc-800 text-white px-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
           </div>
@@ -73,7 +75,7 @@ export default function RegisterPage() {
               type="email"
               placeholder="Email"
               {...register('email')}
-              className="w-full bg-zinc-800 text-white px-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
           </div>
@@ -83,7 +85,7 @@ export default function RegisterPage() {
               type="tel"
               placeholder="Celular"
               {...register('phone')}
-              className="w-full bg-zinc-800 text-white px-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone.message}</p>}
           </div>
@@ -93,7 +95,7 @@ export default function RegisterPage() {
               type="password"
               placeholder="Senha"
               {...register('password')}
-              className="w-full bg-zinc-800 text-white px-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
           </div>
@@ -103,7 +105,7 @@ export default function RegisterPage() {
               type="password"
               placeholder="Confirme a senha"
               {...register('confirmPassword')}
-              className="w-full bg-zinc-800 text-white px-4 py-3 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword.message}</p>}
           </div>
@@ -111,7 +113,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-all"
+            className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition-all"
           >
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
