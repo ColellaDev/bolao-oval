@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { userId, week, game, choice } = body;
+    const { userId, week, gameId, choiceId } = body;
 
-    if (!userId || !week || !game || !choice) {
+    if (!userId || !week || !gameId || !choiceId) {
       return NextResponse.json({ error: 'Campos obrigatórios faltando' }, { status: 400 });
     }
 
@@ -17,8 +17,8 @@ export async function POST(request: Request) {
       data: {
         userId,
         week,
-        game,
-        choice,
+        gameId,
+        choiceId,
       },
     });
 

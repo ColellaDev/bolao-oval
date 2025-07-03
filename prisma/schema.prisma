@@ -22,7 +22,7 @@ model Bet {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   week      Int
-  game      String
-  choice    String
+  gameId    String
+  choiceId  String
   createdAt DateTime @default(now())
 }
