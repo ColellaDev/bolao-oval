@@ -15,7 +15,7 @@ export default function BetFormPage() {
   const [userId, setUserId] = useState('')
   const [palpites, setPalpites] = useState<{ [key: string]: string }>({})
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
+  const [isSubmitting, setIsSubmitting] = useState(false)
   
   useEffect(() => {
     const fetchGames = async () => {
@@ -59,6 +59,9 @@ export default function BetFormPage() {
       return
     }
 
+    setIsSubmitting(true)
+    setStatus('idle') 
+
     try {
       if (!week) {
         setStatus('error')
@@ -88,6 +91,8 @@ export default function BetFormPage() {
     } catch (error) {
       console.error('Erro ao enviar apostas:', error)
       setStatus('error')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -134,9 +139,10 @@ export default function BetFormPage() {
 
           <button
             type="submit"
-            className="w-full bg-primary hover:bg-primary-hover transition-colors text-white py-3 rounded-lg font-bold shadow-lg"
+            disabled={isSubmitting}
+            className="w-full bg-primary hover:bg-primary-hover transition-colors text-white py-3 rounded-lg font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Enviar Apostas
+            {isSubmitting ? 'Enviando...' : 'Enviar Apostas'}
           </button>
 
           {status === 'success' && (
