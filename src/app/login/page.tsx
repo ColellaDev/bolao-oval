@@ -51,14 +51,14 @@ export default function LoginPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md bg-surface p-8 rounded-2xl shadow-lg space-y-4"
       >
-        <h1 className="text-2xl font-bold text-primary text-center">Entrar</h1>
+        <h1 className="text-2xl font-bold text-primary text-center">Login</h1>
 
         <div>
           <input
             type="email"
             placeholder="Email"
             {...register('email')}
-            className="w-full p-3 rounded bg-background text-text placeholder-muted focus:outline-none"
+            className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
         </div>
@@ -68,7 +68,7 @@ export default function LoginPage() {
             type="password"
             placeholder="Senha"
             {...register('password')}
-            className="w-full p-3 rounded bg-background text-text placeholder-muted focus:outline-none"
+            className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
@@ -78,7 +78,7 @@ export default function LoginPage() {
           disabled={isSubmitting}
           className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 rounded transition"
         >
-          {isSubmitting ? 'Entrando...' : 'Entrar'}
+          {isSubmitting ? 'Logando...' : 'Login'}
         </button>
 
         {status === 'success' && (
