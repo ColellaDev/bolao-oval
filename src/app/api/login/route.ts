@@ -3,7 +3,11 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'segreto-total'
+const JWT_SECRET = process.env.JWT_SECRET
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET não definido nas variáveis de ambiente')
+}
 
 export async function POST(request: Request) {
   try {
@@ -34,7 +38,7 @@ export async function POST(request: Request) {
         email: user.email,
         role: user.role
       },
-      JWT_SECRET,
+      JWT_SECRET as string,
       {
         expiresIn: '7d'
       }
