@@ -44,7 +44,21 @@ export async function POST(request: Request) {
       }
     )
 
-    return NextResponse.json({ success: true, token })
+    const response = NextResponse.json({
+      user: { id: user.id, name: user.name, email: user.email, role: user.role }
+    })
+
+    response.cookies.set({
+      name: 'auth_token',
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, 
+    })
+
+    return response
   } catch (error) {
     console.error('Erro no login:', error)
     return NextResponse.json({ error: 'Erro interno no servidor' }, { status: 500 })
