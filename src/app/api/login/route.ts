@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 
 const JWT_SECRET = process.env.JWT_SECRET
 
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET não definido nas variáveis de ambiente')
 }
+
+const secret = new TextEncoder().encode(JWT_SECRET)
 
 export async function POST(request: Request) {
   try {
@@ -31,21 +33,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Senha incorreta' }, { status: 401 })
     }
 
-    const token = jwt.sign(
-      {
+    // 🔐 Gera o token com jose
+    const token = await new SignJWT({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('7d')
+      .sign(secret)
+
+    // 🍪 Cria o cookie
+    const response = NextResponse.json({
+      user: {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role
-      },
-      JWT_SECRET as string,
-      {
-        expiresIn: '7d'
       }
-    )
-
-    const response = NextResponse.json({
-      user: { id: user.id, name: user.name, email: user.email, role: user.role }
     })
 
     response.cookies.set({
@@ -55,7 +61,7 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, 
+      maxAge: 60 * 60 * 24 * 7 // 7 dias
     })
 
     return response
