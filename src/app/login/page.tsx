@@ -4,11 +4,15 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Senha inválida')
 })
+
+
 
 type LoginData = z.infer<typeof loginSchema>
 
@@ -24,6 +28,9 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema)
   })
 
+  const router = useRouter()
+  const { fetchUser } = useAuth()
+
   const onSubmit = async (data: LoginData) => {
     try {
       const res = await fetch('/api/login', {
@@ -37,7 +44,8 @@ export default function LoginPage() {
         throw new Error(resData.error || 'Erro ao fazer login')
       }
 
-      setStatus('success')
+      await fetchUser()
+      router.push('/')
       
     } catch (err: any) {
       setStatus('error')
@@ -81,9 +89,6 @@ export default function LoginPage() {
           {isSubmitting ? 'Logando...' : 'Login'}
         </button>
 
-        {status === 'success' && (
-          <p className="text-green-500 text-center">✅ Login realizado com sucesso!</p>
-        )}
         {status === 'error' && (
           <p className="text-red-500 text-center">❌ {errorMessage}</p>
         )}

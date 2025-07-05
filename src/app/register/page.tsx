@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nome muito curto'),
@@ -31,6 +33,8 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema)
   })
 
+  const router = useRouter()
+
   const onSubmit = async (data: RegisterData) => {
     try {
       const res = await fetch('/api/register', {
@@ -43,9 +47,8 @@ export default function RegisterPage() {
         const resData = await res.json()
         throw new Error(resData.error || 'Erro ao cadastrar')
       }
-
+      router.push('/login')
       setStatus('success')
-      reset()
     } catch (err: any) {
       setStatus('error')
       setErrorMessage(err.message)

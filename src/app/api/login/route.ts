@@ -33,7 +33,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Senha incorreta' }, { status: 401 })
     }
 
-    // 🔐 Gera o token com jose
     const token = await new SignJWT({
       id: user.id,
       name: user.name,
@@ -44,7 +43,6 @@ export async function POST(request: Request) {
       .setExpirationTime('7d')
       .sign(secret)
 
-    // 🍪 Cria o cookie
     const response = NextResponse.json({
       user: {
         id: user.id,
@@ -61,7 +59,7 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7 // 7 dias
+      maxAge: 60 * 60 * 24 * 7
     })
 
     return response
