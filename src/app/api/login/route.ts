@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
+      return NextResponse.json({ error: 'E-mail não cadastrado' }, { status: 404 })
     }
 
     const isValid = await bcrypt.compare(password, user.password)

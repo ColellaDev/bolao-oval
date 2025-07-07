@@ -3,23 +3,18 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import { toast } from 'sonner'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Senha inválida')
 })
 
-
-
 type LoginData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
-
   const {
     register,
     handleSubmit,
@@ -45,11 +40,10 @@ export default function LoginPage() {
       }
 
       await fetchUser()
+      toast.success('Login realizado com sucesso!')
       router.push('/')
-      
     } catch (err: any) {
-      setStatus('error')
-      setErrorMessage(err.message)
+      toast.error(err.message || 'Erro ao fazer login')
     }
   }
 
@@ -84,14 +78,10 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 rounded transition cursor-pointer"
+          className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 rounded-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Logando...' : 'Login'}
         </button>
-
-        {status === 'error' && (
-          <p className="text-red-500 text-center">❌ {errorMessage}</p>
-        )}
 
         <button
           type="button"

@@ -3,9 +3,8 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-
+import { toast } from 'sonner'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nome muito curto'),
@@ -21,13 +20,10 @@ const registerSchema = z.object({
 type RegisterData = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [errorMessage, setErrorMessage] = useState('')
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting }
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema)
@@ -47,11 +43,10 @@ export default function RegisterPage() {
         const resData = await res.json()
         throw new Error(resData.error || 'Erro ao cadastrar')
       }
+      toast.success('Cadastro realizado com sucesso!')
       router.push('/login')
-      setStatus('success')
     } catch (err: any) {
-      setStatus('error')
-      setErrorMessage(err.message)
+      toast.error(err.message || 'Ocorreu um erro ao cadastrar.')
     }
   }
 
@@ -120,14 +115,6 @@ export default function RegisterPage() {
           >
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
-
-          {status === 'success' && (
-            <p className="text-green-400 text-center font-medium">✅ Cadastro realizado com sucesso!</p>
-          )}
-
-          {status === 'error' && (
-            <p className="text-red-400 text-center font-medium">❌ {errorMessage}</p>
-          )}
 
           <div className="text-center">
             <button
