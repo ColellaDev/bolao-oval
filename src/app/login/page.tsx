@@ -57,7 +57,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background text-text px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md bg-surface p-8 rounded-2xl shadow-lg space-y-4"
+        className="w-full max-w-md bg-surface p-8 rounded-2xl shadow-lg space-y-4 text-center"
       >
         <h1 className="text-2xl font-bold text-primary text-center">Login</h1>
 
@@ -84,7 +84,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 rounded transition"
+          className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 rounded transition cursor-pointer"
         >
           {isSubmitting ? 'Logando...' : 'Login'}
         </button>
@@ -92,6 +92,14 @@ export default function LoginPage() {
         {status === 'error' && (
           <p className="text-red-500 text-center">❌ {errorMessage}</p>
         )}
+
+        <button
+          type="button"
+          onClick={() => router.push('/register')}
+          className="text-sm text-primary hover:underline cursor-pointer"
+        >
+          Criar conta
+        </button>
       </form>
     </div>
   )

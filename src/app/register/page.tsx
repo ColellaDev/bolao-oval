@@ -60,7 +60,7 @@ export default function RegisterPage() {
     <main className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-surface rounded-xl p-8 shadow-lg">
         
-        <h1 className="text-3xl font-bold text-text mb-6 text-center">Cadastro</h1>
+        <h1 className="text-3xl font-bold text-text mb-6 text-center">Crie sua conta</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
@@ -116,7 +116,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition-all"
+            className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
@@ -128,6 +128,16 @@ export default function RegisterPage() {
           {status === 'error' && (
             <p className="text-red-400 text-center font-medium">❌ {errorMessage}</p>
           )}
+
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => router.push('/login')}
+              className="text-sm text-primary hover:underline cursor-pointer"
+            >
+              Já tem uma conta? Faça login
+            </button>
+          </div>
         </form>
       </div>
     </main>
