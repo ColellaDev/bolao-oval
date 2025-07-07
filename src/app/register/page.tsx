@@ -1,11 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { User, Mail, Phone, Lock } from 'lucide-react'
+import { User, Mail, Phone, Lock, Eye, EyeOff } from 'lucide-react'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nome muito curto'),
@@ -21,6 +22,8 @@ const registerSchema = z.object({
 type RegisterData = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     register,
@@ -102,11 +105,18 @@ export default function RegisterPage() {
             <div className="relative flex items-center">
               <Lock className="w-5 h-5 absolute left-3 text-muted" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Senha"
                 {...register('password')}
-                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                className="w-full bg-surface text-text border border-muted pl-10 pr-10 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 text-muted hover:text-primary transition-colors cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
             {errors.password && (<p className="text-red-400 text-left text-sm">{errors.password.message}</p>)}
           </div>
@@ -115,11 +125,18 @@ export default function RegisterPage() {
             <div className="relative flex items-center">
               <Lock className="w-5 h-5 absolute left-3 text-muted" />
               <input
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="Confirme a senha"
                 {...register('confirmPassword')}
-                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                className="w-full bg-surface text-text border border-muted pl-10 pr-10 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 text-muted hover:text-primary transition-colors cursor-pointer"
+              >
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
             {errors.confirmPassword && (<p className="text-red-400 text-left text-sm">{errors.confirmPassword.message}</p>)}
           </div>

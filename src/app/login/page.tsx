@@ -1,12 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from 'sonner'
-import { Lock, Mail } from 'lucide-react'
+import { Lock, Mail, Eye, EyeOff } from 'lucide-react'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -16,6 +17,8 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -75,11 +78,18 @@ export default function LoginPage() {
           <div className="relative flex items-center">
             <Lock className="w-5 h-5 absolute left-3 text-muted" />
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Senha"
               {...register('password')}
-              className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              className="w-full bg-surface text-text border border-muted pl-10 pr-10 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 text-muted hover:text-primary transition-colors cursor-pointer"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
           </div>
           {errors.password && (<p className="text-red-400 text-left text-sm">{errors.password.message}</p>)}
         </div>
