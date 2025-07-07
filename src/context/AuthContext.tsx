@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useEffect, useState, ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 
 type User = {
   id: string
@@ -32,6 +33,7 @@ type Props = {
 export function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+   const router = useRouter()
 
    const fetchUser = async () => {
     try {
@@ -58,7 +60,7 @@ export function AuthProvider({ children }: Props) {
   try {
     await fetch('/api/logout', { method: 'POST' })
     setUser(null)
-    window.location.href = '/login'
+    router.push('/login')
   } catch (error) {
     console.error('Erro ao fazer logout:', error)
   }
