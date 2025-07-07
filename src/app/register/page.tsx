@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { User, Mail, Phone, Lock } from 'lucide-react'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Nome muito curto'),
@@ -55,57 +56,72 @@ export default function RegisterPage() {
     <main className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-surface rounded-xl p-8 shadow-lg">
         
-        <h1 className="text-3xl font-bold text-text mb-6 text-center">Crie sua conta</h1>
+        <h1 className="text-3xl font-bold text-primary mb-6 text-center">Crie sua conta</h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <input
-              type="text"
-              placeholder="Nome"
-              {...register('name')}
-              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
+          <div className="space-y-1">
+            <div className="relative flex items-center">
+              <User className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="text"
+                placeholder="Nome"
+                {...register('name')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.name && (<p className="text-red-400 text-left text-sm">{errors.name.message}</p>)}
           </div>
 
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              {...register('email')}
-              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
+          <div className="space-y-1">
+            <div className="relative flex items-center">
+              <Mail className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="email"
+                placeholder="Email"
+                {...register('email')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.email && (<p className="text-red-400 text-left text-sm">{errors.email.message}</p>)}
           </div>
 
-          <div>
-            <input
-              type="tel"
-              placeholder="Celular"
-              {...register('phone')}
-              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone.message}</p>}
+          <div className="space-y-1">
+            <div className="relative flex items-center">
+              <Phone className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="tel"
+                placeholder="Celular"
+                {...register('phone')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.phone && (<p className="text-red-400 text-left text-sm">{errors.phone.message}</p>)}
           </div>
 
-          <div>
-            <input
-              type="password"
-              placeholder="Senha"
-              {...register('password')}
-              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>}
+          <div className="space-y-1">
+            <div className="relative flex items-center">
+              <Lock className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="password"
+                placeholder="Senha"
+                {...register('password')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.password && (<p className="text-red-400 text-left text-sm">{errors.password.message}</p>)}
           </div>
 
-          <div>
-            <input
-              type="password"
-              placeholder="Confirme a senha"
-              {...register('confirmPassword')}
-              className="w-full bg-surface text-text border border-muted px-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword.message}</p>}
+          <div className="space-y-1">
+            <div className="relative flex items-center">
+              <Lock className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="password"
+                placeholder="Confirme a senha"
+                {...register('confirmPassword')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.confirmPassword && (<p className="text-red-400 text-left text-sm">{errors.confirmPassword.message}</p>)}
           </div>
 
           <button
@@ -116,15 +132,16 @@ export default function RegisterPage() {
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
 
-          <div className="text-center">
+          <p className="text-sm text-muted text-center">
+            Já tem uma conta?{' '}
             <button
               type="button"
               onClick={() => router.push('/login')}
-              className="text-sm text-primary hover:underline cursor-pointer"
+              className="text-primary hover:underline font-semibold cursor-pointer"
             >
-              Já tem uma conta? Faça login
+              Faça login
             </button>
-          </div>
+          </p>
         </form>
       </div>
     </main>
