@@ -12,7 +12,16 @@ const secret = new TextEncoder().encode(JWT_SECRET)
 
 export async function middleware(request: NextRequest) {
   
+  const { pathname } = request.nextUrl
   const token = request.cookies.get('auth_token')?.value
+
+  if (token && (pathname === '/login' || pathname === '/register')) {
+    try {
+      await jose.jwtVerify(token, secret)
+      return NextResponse.redirect(new URL('/', request.url))
+    } catch (error) {
+    }
+  }
 
   if (!token) {
     const loginUrl = new URL('/login', request.url)
@@ -34,6 +43,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/bets/:path*', '/api/bets/:path*'],
+  matcher: [
+    '/((?!api/auth/|api/login|api/register|_next/static|_next/image|favicon.ico|login|register).*)',
+  ],
 }
-
