@@ -14,6 +14,7 @@ export default function BetFormPage() {
 
   const [palpites, setPalpites] = useState<{ [key: string]: string }>({}) 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasSubmitted, setHasSubmitted] = useState(false)
   const { user } = useAuth()
   
   useEffect(() => {
@@ -38,6 +39,34 @@ export default function BetFormPage() {
     fetchGames()
   }, [])
 
+  useEffect(() => {
+    if (!user || !week) {
+      return
+    }
+
+    const fetchUserBets = async () => {
+      try {
+        const response = await fetch(`/api/bets?userId=${user.id}&week=${week}`)
+        if (!response.ok) {
+          throw new Error('Falha ao buscar palpites existentes.')
+        }
+        const data = await response.json()
+        if (data.bets && data.bets.length > 0) {
+          const existingPalpites = data.bets.reduce((acc: any, bet: any) => {
+            acc[bet.gameId] = bet.choiceId
+            return acc
+          }, {})
+          setPalpites(existingPalpites)
+          setHasSubmitted(true)
+        }
+      } catch (err: any) {
+        toast.error(err.message || 'Erro ao carregar seus palpites.')
+      }
+    }
+
+    fetchUserBets()
+  }, [user, week])
+
   const handlePalpite = (jogoId: string, timeId: string) => {
     setPalpites(prev => ({
       ...prev,
@@ -61,31 +90,35 @@ export default function BetFormPage() {
     setIsSubmitting(true)
 
     try {
-      if (!week) {
-        toast.error('Número da semana não carregado. Tente novamente.')
+      if (!week || !user) {
+        toast.error('Informações de usuário ou semana não carregadas.')
         return
       }
 
-      for (const game of games) {
-        const choiceId = palpites[game.id]
-        if (!choiceId) continue 
+      const betsPayload = games.map(game => ({
+        gameId: game.id,
+        choiceId: palpites[game.id],
+      }))
 
-        await fetch('/api/bets', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: user.id,
-            week,
-            gameId: game.id,
-            choiceId
-          })
-        })
+      const res = await fetch('/api/bets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          week,
+          bets: betsPayload,
+        }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Falha ao enviar apostas.')
       }
 
       toast.success('Apostas enviadas com sucesso!')
-      setPalpites({})
-    } catch (error) {
-      toast.error('Ocorreu um erro ao enviar suas apostas.')
+      setHasSubmitted(true)
+    } catch (err: any) {
+      toast.error(err.message || 'Ocorreu um erro ao enviar suas apostas.')
     } finally {
       setIsSubmitting(false)
     }
@@ -111,7 +144,7 @@ export default function BetFormPage() {
     <main className="min-h-screen bg-zinc-900 text-white py-10 px-4">
       <div className="max-w-xl mx-auto bg-zinc-800 rounded-xl shadow-lg p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Bolão Oval - Semana {week} 🏈
+          🏈 Bolão Oval - Semana {week}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -119,18 +152,25 @@ export default function BetFormPage() {
             <GameCard
               key={game.id}
               game={game}
-              onPalpite={handlePalpite}
+              onPalpite={hasSubmitted ? () => {} : handlePalpite}
               palpite={palpites[game.id]}
+              disabled={hasSubmitted}
             />
           ))}
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-primary hover:bg-primary-hover transition-colors text-white py-3 rounded-lg font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? 'Enviando...' : 'Enviar Apostas'}
-          </button>
+          {!hasSubmitted ? (
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-primary hover:bg-primary-hover transition-colors text-white py-3 rounded-lg font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Enviando...' : 'Enviar Apostas'}
+            </button>
+          ) : (
+            <p className="text-center text-sm text-green-400">
+              Suas apostas da semana {week} já foram enviadas!
+            </p>
+          )}
         </form>
       </div>
     </main>
