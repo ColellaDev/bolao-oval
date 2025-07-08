@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <AuthProvider> 
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="bottom-right" />
         </AuthProvider> 
       </body>
     </html>

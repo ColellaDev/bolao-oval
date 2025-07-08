@@ -1,21 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { toast } from 'sonner'
 import { Game } from '@/types'
 import { GameCard } from '@/components/GameCard'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function BetFormPage() {
-  
   const [games, setGames] = useState<Game[]>([])
   const [week, setWeek] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
- 
-  const [userId, setUserId] = useState('')
-  const [palpites, setPalpites] = useState<{ [key: string]: string }>({})
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [palpites, setPalpites] = useState<{ [key: string]: string }>({}) 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { user } = useAuth()
   
   useEffect(() => {
     const fetchGames = async () => {
@@ -49,23 +48,21 @@ export default function BetFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!userId) {
-      alert('Informe o ID do usuário.')
+    if (!user) {
+      toast.error('Você precisa estar logado para enviar suas apostas.')
       return
     }
 
     if (Object.keys(palpites).length < games.length) {
-      alert('Você precisa escolher um time para cada jogo.')
+      toast.warning('Você precisa escolher um time para cada jogo.')
       return
     }
 
     setIsSubmitting(true)
-    setStatus('idle') 
 
     try {
       if (!week) {
-        setStatus('error')
-        console.error('Número da semana não carregado.')
+        toast.error('Número da semana não carregado. Tente novamente.')
         return
       }
 
@@ -77,7 +74,7 @@ export default function BetFormPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userId,
+            userId: user.id,
             week,
             gameId: game.id,
             choiceId
@@ -85,12 +82,10 @@ export default function BetFormPage() {
         })
       }
 
-      setStatus('success')
-      setUserId('')
+      toast.success('Apostas enviadas com sucesso!')
       setPalpites({})
     } catch (error) {
-      console.error('Erro ao enviar apostas:', error)
-      setStatus('error')
+      toast.error('Ocorreu um erro ao enviar suas apostas.')
     } finally {
       setIsSubmitting(false)
     }
@@ -120,14 +115,6 @@ export default function BetFormPage() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <input
-            className="w-full border border-zinc-600 bg-zinc-700 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            placeholder="ID do Usuário"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
-
           {games.map((game) => (
             <GameCard
               key={game.id}
@@ -144,13 +131,6 @@ export default function BetFormPage() {
           >
             {isSubmitting ? 'Enviando...' : 'Enviar Apostas'}
           </button>
-
-          {status === 'success' && (
-            <p className="text-green-400 text-center font-semibold">✅ Apostas enviadas com sucesso!</p>
-          )}
-          {status === 'error' && (
-            <p className="text-red-400 text-center font-semibold">❌ Erro ao enviar apostas.</p>
-          )}
         </form>
       </div>
     </main>
