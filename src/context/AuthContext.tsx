@@ -13,17 +13,15 @@ type User = {
 type AuthContextType = {
   user: User | null
   loading: boolean
-  setUser: (user: User | null) => void
+  login: (user: User) => void
   logout: () => void
-  fetchUser: () => Promise<void> 
 }
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  setUser: () => {},
+  login: () => {},
   logout: () => {},
-  fetchUser: async () => {}
 })
 
 type Props = {
@@ -34,8 +32,8 @@ export function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
    const router = useRouter()
-
-   const fetchUser = async () => {
+   
+  const fetchUser = async () => {
     try {
       const res = await fetch('/api/me')
       if (res.ok) {
@@ -56,6 +54,10 @@ export function AuthProvider({ children }: Props) {
     fetchUser()
   }, [])
 
+  const login = (userData: User) => {
+    setUser(userData)
+  }
+
   const logout = async () => {
   try {
     await fetch('/api/logout', { method: 'POST' })
@@ -67,7 +69,7 @@ export function AuthProvider({ children }: Props) {
 }
 
   return (
-    <AuthContext.Provider value={{ user, loading, setUser, logout, fetchUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

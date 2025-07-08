@@ -28,7 +28,7 @@ export default function LoginPage() {
   })
 
   const router = useRouter()
-  const { fetchUser } = useAuth()
+  const { login } = useAuth() 
 
   const onSubmit = async (data: LoginData) => {
     try {
@@ -43,7 +43,8 @@ export default function LoginPage() {
         throw new Error(resData.error || 'Erro ao fazer login')
       }
 
-      await fetchUser()
+      const { user } = await res.json()
+      login(user)
       toast.success('Login realizado com sucesso!')
       router.push('/')
     } catch (err: any) {
