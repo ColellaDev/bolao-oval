@@ -15,14 +15,72 @@ model User {
   role    String?
   password String
   bets    Bet[]
+  scores  UserSeasonScore[]
 }
 
 model Bet {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  week      Int
-  gameId    String
-  choiceId  String
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  seasonId   Int
+  weekNumber Int
+  gameId     String
+  choiceId   String
+  createdAt  DateTime @default(now())
+  points     Int      @default(0)
+  week       Week     @relation(fields: [seasonId, weekNumber], references: [seasonId, number])
+
+  @@unique([userId, seasonId, weekNumber, gameId])
+}
+
+model Game {
+  id           String   @id
+  name         String
+  date         DateTime
+  seasonId     Int
+  weekNumber   Int
+  homeTeamId   String
+  awayTeamId   String
+  winnerTeamId String?
+  week         Week     @relation(fields: [seasonId, weekNumber], references: [seasonId, number])
+
+  homeTeam Team @relation("HomeGames", fields: [homeTeamId], references: [id])
+  awayTeam Team @relation("AwayGames", fields: [awayTeamId], references: [id])
+}
+
+model Week {
+  number   Int
+  name   String
+  seasonId Int
+  season   Season @relation(fields: [seasonId], references: [id])
+  games  Game[]
+  bets   Bet[]
+
+  @@id([seasonId, number])
+}
+
+model Team {
+  id           String @id
+  displayName  String
+  abbreviation String
+  logo         String @db.Text
+  homeGames    Game[] @relation("HomeGames")
+  awayGames    Game[] @relation("AwayGames")
+}
+
+model UserSeasonScore {
+  userId   String
+  seasonId Int
+  score    Int    @default(0)
+  user     User   @relation(fields: [userId], references: [id])
+  season   Season @relation(fields: [seasonId], references: [id])
+
+  @@id([userId, seasonId])
+}
+
+model Season {
+  id         Int               @id
+  name       String
+  weeks      Week[]
+  userScores UserSeasonScore[]
 }
