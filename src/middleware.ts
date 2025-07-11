@@ -44,6 +44,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api/ingest-games|api/auth/|api/login|api/register|_next/static|_next/image|favicon.ico|login|register).*)',
+    '/((?!api/ingest-games|api/scoring/calculate|api/auth/|api/login|api/register|_next/static|_next/image|favicon.ico|login|register).*)',
   ],
 }

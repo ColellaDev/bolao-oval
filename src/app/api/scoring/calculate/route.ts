@@ -47,48 +47,43 @@ export async function POST(request: Request) {
       },
     })
 
-    const correctBetIds: string[] = []
-    const userPoints = new Map<string, number>() 
+    const correctBets = betsToScore.filter(
+      (bet) => winnersMap.get(bet.gameId) === bet.choiceId,
+    )
 
-    for (const bet of betsToScore) {
-      const winnerId = winnersMap.get(bet.gameId)
-      if (winnerId && bet.choiceId === winnerId) {
-        correctBetIds.push(bet.id)
-        userPoints.set(bet.userId, (userPoints.get(bet.userId) || 0) + 1)
-      }
-    }
-
-    if (correctBetIds.length === 0) {
+    if (correctBets.length === 0) {
       return NextResponse.json(
         { message: 'Nenhum acerto novo para pontuar nesta semana.' },
         { status: 200 },
       )
     }
 
-    const transactionPromises = []
+    const userPoints = correctBets.reduce((acc, bet) => {
+      acc.set(bet.userId, (acc.get(bet.userId) || 0) + 1)
+      return acc
+    }, new Map<string, number>())
 
-    transactionPromises.push(
-      prisma.bet.updateMany({
-        where: { id: { in: correctBetIds } },
-        data: { points: 1 },
-      }),
-    )
+    const correctBetIds = correctBets.map((bet) => bet.id)
 
-    for (const [userId, pointsToAdd] of userPoints.entries()) {
-      transactionPromises.push(
+    const updateBetsPromise = prisma.bet.updateMany({
+      where: { id: { in: correctBetIds } },
+      data: { points: 1 },
+    })
+
+    const updateUserScoresPromises = Array.from(userPoints.entries()).map(
+      ([userId, pointsToAdd]) =>
         prisma.userSeasonScore.upsert({
           where: { userId_seasonId: { userId, seasonId } },
           update: { score: { increment: pointsToAdd } },
           create: { userId, seasonId, score: pointsToAdd },
         }),
-      )
-    }
+    )
 
-    await prisma.$transaction(transactionPromises)
+    await prisma.$transaction([updateBetsPromise, ...updateUserScoresPromises])
 
     return NextResponse.json({
       message: 'Pontuação calculada com sucesso!',
-      updatedBets: correctBetIds.length,
+      updatedBets: correctBets.length,
       usersScored: userPoints.size,
     })
   } catch (error) {
