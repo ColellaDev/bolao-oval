@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Game } from '@/types'
+import { Game, WeekInfo } from '@/types'
 import { GameCard } from '@/components/GameCard'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function BetFormPage() {
   const [games, setGames] = useState<Game[]>([])
-  const [week, setWeek] = useState<number | null>(null)
+  const [week, setWeek] = useState<WeekInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -20,17 +20,24 @@ export default function BetFormPage() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch(
-          'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard'
-        )
+        const response = await fetch('/api/games')
         if (!response.ok) {
-          throw new Error('Falha ao buscar os jogos da API')
+          const data = await response.json().catch(() => ({}))
+          throw new Error(
+            data.error || 'Falha ao buscar os jogos do nosso servidor',
+          )
         }
         const data = await response.json()
+
+        if (!data.week) {
+          throw new Error('Nenhuma semana de jogos ativa encontrada.')
+        }
+
         setGames(data.events)
-        setWeek(data.week.number)
+        setWeek(data.week)
       } catch (err: any) {
-        setError(err.message)
+        setError(err.message || 'Ocorreu um erro desconhecido.')
+        toast.error(err.message || 'Ocorreu um erro desconhecido.')
       } finally {
         setLoading(false)
       }
@@ -46,7 +53,9 @@ export default function BetFormPage() {
 
     const fetchUserBets = async () => {
       try {
-        const response = await fetch(`/api/bets?userId=${user.id}&week=${week}`)
+        const response = await fetch(
+          `/api/bets?userId=${user.id}&seasonId=${week.seasonId}&weekNumber=${week.number}`,
+        )
         if (!response.ok) {
           throw new Error('Falha ao buscar palpites existentes.')
         }
@@ -90,8 +99,8 @@ export default function BetFormPage() {
     setIsSubmitting(true)
 
     try {
-      if (!week || !user) {
-        toast.error('Informações de usuário ou semana não carregadas.')
+      if (!week) {
+        toast.error('Informações da semana não carregadas.')
         return
       }
 
@@ -105,7 +114,8 @@ export default function BetFormPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user.id,
-          week,
+          seasonId: week.seasonId,
+          weekNumber: week.number,
           bets: betsPayload,
         }),
       })
@@ -144,7 +154,7 @@ export default function BetFormPage() {
     <main className="min-h-screen bg-zinc-900 text-white py-10 px-4">
       <div className="max-w-xl mx-auto bg-zinc-800 rounded-xl shadow-lg p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          🏈 Bolão Oval - Semana {week}
+          🏈 Bolão Oval - {week?.name}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -152,7 +162,7 @@ export default function BetFormPage() {
             <GameCard
               key={game.id}
               game={game}
-              onPalpite={hasSubmitted ? () => {} : handlePalpite}
+              onPalpite={handlePalpite}
               palpite={palpites[game.id]}
               disabled={hasSubmitted}
             />
@@ -167,8 +177,8 @@ export default function BetFormPage() {
               {isSubmitting ? 'Enviando...' : 'Enviar Apostas'}
             </button>
           ) : (
-            <p className="text-center text-sm text-green-400">
-              Suas apostas da semana {week} já foram enviadas!
+            <p className="text-center text-sm text-green-400 font-semibold">
+              Suas apostas da rodada "{week?.name}" já foram enviadas!
             </p>
           )}
         </form>

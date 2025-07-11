@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma'
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const userId = searchParams.get('userId')
-  const week = searchParams.get('week')
+  const seasonId = searchParams.get('seasonId')
+  const weekNumber = searchParams.get('weekNumber')
 
-  if (!userId || !week) {
+  if (!userId || !seasonId || !weekNumber) {
     return NextResponse.json(
-      { error: 'userId e week são obrigatórios' },
+      { error: 'userId, seasonId e weekNumber são obrigatórios' },
       { status: 400 },
     )
   }
@@ -17,7 +18,8 @@ export async function GET(request: Request) {
     const bets = await prisma.bet.findMany({
       where: {
         userId,
-        week: parseInt(week, 10),
+        seasonId: parseInt(seasonId, 10),
+        weekNumber: parseInt(weekNumber, 10),
       },
     })
     return NextResponse.json({ bets })
@@ -32,9 +34,15 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId, week, bets } = await request.json()
+    const { userId, seasonId, weekNumber, bets } = await request.json()
 
-    if (!userId || !week || !Array.isArray(bets) || bets.length === 0) {
+    if (
+      !userId ||
+      !seasonId ||
+      !weekNumber ||
+      !Array.isArray(bets) ||
+      bets.length === 0
+    ) {
       return NextResponse.json(
         { error: 'Dados inválidos para aposta.' },
         { status: 400 },
@@ -44,7 +52,8 @@ export async function POST(request: Request) {
     const existingBetsCount = await prisma.bet.count({
       where: {
         userId,
-        week,
+        seasonId,
+        weekNumber,
       },
     })
 
@@ -58,12 +67,15 @@ export async function POST(request: Request) {
       )
     }
 
-    const betsToCreate = bets.map((bet: { gameId: string; choiceId: string }) => ({
-      userId,
-      week,
-      gameId: bet.gameId,
-      choiceId: bet.choiceId,
-    }))
+    const betsToCreate = bets.map(
+      (bet: { gameId: string; choiceId: string }) => ({
+        userId,
+        seasonId,
+        weekNumber,
+        gameId: bet.gameId,
+        choiceId: bet.choiceId,
+      }),
+    )
 
     await prisma.bet.createMany({
       data: betsToCreate,

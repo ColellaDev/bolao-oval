@@ -28,8 +28,8 @@ export function GameCard({ game, palpite, onPalpite, disabled  }: GameCardProps)
             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-bold border shadow-md transition-all
               ${
                 palpite === competitor.team.id
-                  ? 'bg-blue-600 border-blue-700 text-white'
-                  : 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300'
+                  ? 'bg-blue-600 border-blue-700 text-white disabled:opacity-80'
+                  : 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300 disabled:bg-zinc-500 disabled:text-zinc-400'
               }`}
             onClick={() => onPalpite(game.id, competitor.team.id)}
           >
@@ -42,4 +42,3 @@ export function GameCard({ game, palpite, onPalpite, disabled  }: GameCardProps)
     </div>
   )
 }
-

@@ -6,20 +6,22 @@ export interface Team {
 }
 
 export interface Competitor {
-  id: string
   team: Team
-  homeAway: 'home' | 'away'
 }
 
 export interface Competition {
-  id: string
   competitors: Competitor[]
 }
 
 export interface Game {
   id: string
   name: string
-  shortName: string
   date: string
   competitions: Competition[]
+}
+
+export interface WeekInfo {
+  number: number
+  name: string
+  seasonId: number
 }
