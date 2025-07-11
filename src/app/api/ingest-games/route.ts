@@ -11,6 +11,8 @@ const teamSchema = z.object({
 
 const competitorSchema = z.object({
   team: teamSchema,
+  score: z.string().optional(),
+  winner: z.boolean().optional(),
 })
 
 const gameSchema = z.object({
@@ -22,6 +24,9 @@ const gameSchema = z.object({
       competitors: z.array(competitorSchema),
     }),
   ),
+  status: z.object({
+    type: z.object({ completed: z.boolean() }),
+  }),
 })
 
 const espnResponseSchema = z.object({
@@ -94,16 +99,30 @@ export async function POST() {
 
         for (const event of events) {
           const [home, away] = event.competitions[0].competitors
+          const winnerTeamId = home.winner
+            ? home.team.id
+            : away.winner
+              ? away.team.id
+              : null
+
           transactionPromises.push(
             tx.game.upsert({
               where: { id: event.id },
-              update: { name: event.name, date: new Date(event.date) },
+              update: {
+                name: event.name,
+                date: new Date(event.date),
+                status: event.status.type.completed ? 'FINAL' : 'IN_PROGRESS',
+                homeTeamScore: home.score ? parseInt(home.score, 10) : null,
+                awayTeamScore: away.score ? parseInt(away.score, 10) : null,
+                winnerTeamId,
+              },
               create: {
                 id: event.id,
                 name: event.name,
                 date: new Date(event.date),
                 seasonId: seasonId,
                 weekNumber: weekNumber,
+                status: event.status.type.completed ? 'FINAL' : 'SCHEDULED',
                 homeTeamId: home.team.id,
                 awayTeamId: away.team.id,
               },

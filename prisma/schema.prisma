@@ -41,7 +41,10 @@ model Game {
   weekNumber   Int
   homeTeamId   String
   awayTeamId   String
+  homeTeamScore Int?
+  awayTeamScore Int?
   winnerTeamId String?
+  status       String   @default("SCHEDULED")
   week         Week     @relation(fields: [seasonId, weekNumber], references: [seasonId, number])
 
   homeTeam Team @relation("HomeGames", fields: [homeTeamId], references: [id])

@@ -18,6 +18,10 @@ export interface Game {
   name: string
   date: string
   competitions: Competition[]
+  homeTeamScore?: number | null
+  awayTeamScore?: number | null
+  winnerTeamId?: string | null
+  status: string
 }
 
 export interface WeekInfo {

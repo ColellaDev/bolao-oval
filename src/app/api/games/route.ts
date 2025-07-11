@@ -59,6 +59,10 @@ export async function GET() {
           competitors: [{ team: game.homeTeam }, { team: game.awayTeam }],
         },
       ],
+      homeTeamScore: game.homeTeamScore,
+      awayTeamScore: game.awayTeamScore,
+      winnerTeamId: game.winnerTeamId,
+      status: game.status,
     }))
 
     return NextResponse.json({
@@ -73,4 +77,3 @@ export async function GET() {
     )
   }
 }
-
