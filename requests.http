@@ -3,9 +3,11 @@ POST http://localhost:3000/api/register
 Content-Type: application/json
 
 {
-  "name": "Marcos Colella",
-  "email": "marcos@example.com",
-  "password": "123456"
+  "name": "REST Client",
+  "email": "rest@example.com",
+  "phone": "11999999999",
+  "password": "123456",
+  "confirmPassword": "123456"
 }
 
 ### 🔑 Login
@@ -13,7 +15,7 @@ POST http://localhost:3000/api/login
 Content-Type: application/json
 
 {
-  "email": "marcos@example.com",
+  "email": "emailNaoCadastrado@example.com",
   "password": "123456"
 }
 
