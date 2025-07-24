@@ -2,6 +2,8 @@
 
 Projeto em desenvolvimento...
 
+O Bolão Oval é uma plataforma FullStack em desenvolvimento para fãs de futebol americano participarem de bolões da NFL. O projeto integra-se a uma API externa da ESPN para buscar dados dos jogos em tempo real, que são processados e servidos por uma API própria construída com Next.js. Os usuários podem se cadastrar, fazer login de forma segura e registrar seus palpites para os jogos da temporada, competindo com outros participantes em um ranking atualizado.
+
 ## Tecnologias Utilizadas
 - Next.js
 - TypeScript
