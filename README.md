@@ -12,9 +12,11 @@ O Bolão Oval é uma plataforma FullStack em desenvolvimento para fãs de futebo
 
 ## Preview
 
-<img width="896" height="807" alt="bolaoovalapostas" src="https://github.com/user-attachments/assets/779b8324-daa7-45e0-a7f0-01e8b7046261" />
-<img width="909" height="774" alt="bolaoovalregister" src="https://github.com/user-attachments/assets/ee4dfca0-e361-4944-ba56-a156d85489a2" />
-<img width="892" height="750" alt="bolaoovallogin" src="https://github.com/user-attachments/assets/5ed6c852-669b-435f-9df9-22c760754fb2" />
+<img width="989" height="841" alt="bets" src="https://github.com/user-attachments/assets/627b029d-2ee2-4ce5-be72-e818b1eb5f2e" />
+<img width="1077" height="858" alt="register" src="https://github.com/user-attachments/assets/9a0c6fbe-9cfc-443e-8b7c-db75543c15d3" />
+<img width="1083" height="772" alt="login" src="https://github.com/user-attachments/assets/180a3279-5c0a-411b-b9e7-b9479ede44b2" />
+<img width="527" height="793" alt="Mobile" src="https://github.com/user-attachments/assets/cb6037ab-813d-4b7c-88e4-c6944641da88" />
+
 
 
 ## 🔗 Links
