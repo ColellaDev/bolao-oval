@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import Logo from '@/assets/Logo.png'
 import { RegisterForm } from '@/components/RegisterForm'
