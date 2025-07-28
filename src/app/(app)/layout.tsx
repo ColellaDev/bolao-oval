@@ -1,4 +1,5 @@
 import { Header } from '@/components/Header'
+import { MobileNav } from '@/components/MobileNav'
 
 export default function AppLayout({
   children
@@ -6,9 +7,12 @@ export default function AppLayout({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <div className="bg-background min-h-screen">
       <Header />
-      {children}
-    </>
+      <main className="pb-20 md:pb-0">
+        {children}
+      </main>
+      <MobileNav />
+    </div>
   )
 }

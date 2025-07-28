@@ -136,7 +136,7 @@ export default function BetFormPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-background text-text">
         <p>Carregando jogos...</p>
       </div>
     )
@@ -144,15 +144,15 @@ export default function BetFormPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-900 text-white">
+      <div className="min-h-screen flex items-center justify-center bg-background text-text">
         <p className="text-red-500">Erro ao carregar jogos: {error}</p>
       </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-zinc-900 text-white py-10 px-4">
-      <div className="max-w-xl mx-auto bg-zinc-800 rounded-xl shadow-lg p-6">
+    <main className="min-h-screen bg-background text-text py-10 px-4">
+      <div className="max-w-xl mx-auto bg-surface rounded-xl shadow-lg p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">
           🏈 Bolão Oval - {week?.name}
         </h1>
