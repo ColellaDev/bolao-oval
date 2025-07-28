@@ -1,11 +1,13 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import Logo from '@/assets/Logo.png' 
 import { toast } from 'sonner'
 import { Lock, Mail, Eye, EyeOff } from 'lucide-react'
 
@@ -53,67 +55,81 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-text px-4">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md bg-surface p-8 rounded-2xl shadow-2xl space-y-6 text-center border border-zinc-800"
-      >
-        <h1 className="text-3xl font-bold text-primary text-center">
-          Login
-        </h1>
-
-        <div className="space-y-2">
-          <div className="relative flex items-center">
-            <Mail className="w-5 h-5 absolute left-3 text-muted" />
-            <input
-              type="email"
-              placeholder="Email"
-              {...register('email')}
-              className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-            />
-          </div>
-          {errors.email && (<p className="text-red-400 text-left text-sm">{errors.email.message}</p>)}
+    <div className="min-h-screen flex items-center justify-center bg-background text-text p-4">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-38 max-w-6xl w-full">
+        <div>
+          <Image
+            src={Logo}
+            alt="Bolão Oval Logo"
+            width={400}
+            height={400}
+            quality={100}
+            priority
+            className="h-40 w-40 object-contain lg:h-96 lg:w-96"
+          />
         </div>
 
-        <div className="space-y-2">
-          <div className="relative flex items-center">
-            <Lock className="w-5 h-5 absolute left-3 text-muted" />
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Senha"
-              {...register('password')}
-              className="w-full bg-surface text-text border border-muted pl-10 pr-10 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-            />
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full max-w-md bg-surface p-8 rounded-2xl shadow-2xl space-y-6 text-center border border-zinc-800"
+        >
+          <h1 className="text-3xl font-bold text-primary text-center">
+            Login
+          </h1>
+
+          <div className="space-y-2">
+            <div className="relative flex items-center">
+              <Mail className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type="email"
+                placeholder="Email"
+                {...register('email')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-4 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+            </div>
+            {errors.email && (<p className="text-red-400 text-left text-sm">{errors.email.message}</p>)}
+          </div>
+
+          <div className="space-y-2">
+            <div className="relative flex items-center">
+              <Lock className="w-5 h-5 absolute left-3 text-muted" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Senha"
+                {...register('password')}
+                className="w-full bg-surface text-text border border-muted pl-10 pr-10 py-3 rounded-lg placeholder-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 text-muted hover:text-primary transition-colors cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+            {errors.password && (<p className="text-red-400 text-left text-sm">{errors.password.message}</p>)}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? 'Logando...' : 'Login'}
+          </button>
+
+          <p className="text-sm text-muted">
+            Não tem uma conta?{' '}
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 text-muted hover:text-primary transition-colors cursor-pointer"
+              onClick={() => router.push('/register')}
+              className="text-primary hover:underline font-semibold cursor-pointer"
             >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              Crie uma agora
             </button>
-          </div>
-          {errors.password && (<p className="text-red-400 text-left text-sm">{errors.password.message}</p>)}
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? 'Logando...' : 'Login'}
-        </button>
-
-        <p className="text-sm text-muted">
-          Não tem uma conta?{' '}
-          <button
-            type="button"
-            onClick={() => router.push('/register')}
-            className="text-primary hover:underline font-semibold cursor-pointer"
-          >
-            Crie uma agora
-          </button>
-        </p>
-      </form>
+          </p>
+        </form>
+      </div>
     </div>
   )
 }
