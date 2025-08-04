@@ -75,6 +75,7 @@ model UserSeasonScore {
   userId   String
   seasonId Int
   score    Int    @default(0)
+  sl       Int    @default(0)
   user     User   @relation(fields: [userId], references: [id])
   season   Season @relation(fields: [seasonId], references: [id])
 

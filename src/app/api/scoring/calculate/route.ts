@@ -7,6 +7,8 @@ const calculateScoreSchema = z.object({
   weekNumber: z.number(),
 })
 
+const POINTS_PER_CORRECT_BET = 1
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -63,26 +65,50 @@ export async function POST(request: Request) {
       return acc
     }, new Map<string, number>())
 
+    const participantsInSeason = await prisma.bet.groupBy({
+      by: ['userId'],
+      where: {
+        seasonId,
+      },
+    })
+    const totalParticipants = participantsInSeason.length
+
+    const weeklyRanking = Array.from(userPoints.entries())
+      .map(([userId, weeklyScore]) => ({ userId, weeklyScore }))
+      .sort((a, b) => b.weeklyScore - a.weeklyScore) 
+
+    const userSlPoints = new Map<string, number>()
+    let rank = 1
+    for (let i = 0; i < weeklyRanking.length; i++) {
+      if (i > 0 && weeklyRanking[i].weeklyScore < weeklyRanking[i - 1].weeklyScore) {
+        rank = i + 1
+      }
+
+      const { userId } = weeklyRanking[i]
+      const slPointsToAdd = totalParticipants > 0 ? totalParticipants - rank + 1 : 0
+      userSlPoints.set(userId, slPointsToAdd)
+    }
+
     const correctBetIds = correctBets.map((bet) => bet.id)
 
     const updateBetsPromise = prisma.bet.updateMany({
       where: { id: { in: correctBetIds } },
-      data: { points: 1 },
+      data: { points: POINTS_PER_CORRECT_BET },
     })
 
-    const updateUserScoresPromises = Array.from(userPoints.entries()).map(
-      ([userId, pointsToAdd]) =>
-        prisma.userSeasonScore.upsert({
-          where: { userId_seasonId: { userId, seasonId } },
-          update: { score: { increment: pointsToAdd } },
-          create: { userId, seasonId, score: pointsToAdd },
-        }),
-    )
+    const updateUserScoresPromises = Array.from(userPoints.entries()).map(([userId, pointsToAdd]) => {
+      const slPointsToAdd = userSlPoints.get(userId) || 0
+      return prisma.userSeasonScore.upsert({
+        where: { userId_seasonId: { userId, seasonId } },
+        update: { score: { increment: pointsToAdd }, sl: { increment: slPointsToAdd } },
+        create: { userId, seasonId, score: pointsToAdd, sl: slPointsToAdd },
+      })
+    })
 
     await prisma.$transaction([updateBetsPromise, ...updateUserScoresPromises])
 
     return NextResponse.json({
-      message: 'Pontuação calculada com sucesso!',
+      message: 'Pontuação e SL Score calculados com sucesso!',
       updatedBets: correctBets.length,
       usersScored: userPoints.size,
     })
