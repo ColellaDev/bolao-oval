@@ -22,7 +22,7 @@ export async function GET(
       },
         orderBy: [
           { score: 'desc' }, 
-          { sl: 'asc' }, 
+          { sl: 'desc' }, 
         ],
         include: {
           user: {
@@ -34,10 +34,17 @@ export async function GET(
         },
     })
 
-    const rankedScores = scores.map((score, index) => ({
-      ...score,
-      rank: index + 1, 
-    }))
+    let rank = 1
+    const rankedScores = scores.map((score, index, allScores) => {
+      if (
+        index > 0 &&
+        (score.score !== allScores[index - 1].score ||
+          score.sl !== allScores[index - 1].sl)
+      ) {
+        rank = index + 1
+      }
+      return { ...score, rank }
+    })
 
     return NextResponse.json({
       ranking: rankedScores,
