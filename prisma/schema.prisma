@@ -16,6 +16,7 @@ model User {
   password String
   bets    Bet[]
   scores  UserSeasonScore[]
+  weekScores UserWeekScore[]
 }
 
 model Bet {
@@ -60,6 +61,21 @@ model Week {
   bets   Bet[]
 
   @@id([seasonId, number])
+  scores   UserWeekScore[]
+}
+
+model UserWeekScore {
+  id         String @id @default(cuid())
+  score      Int    @default(0)
+  sl         Int    @default(0)
+  weekNumber Int
+
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  week     Week   @relation(fields: [seasonId, weekNumber], references: [seasonId, number])
+  seasonId Int
+
+  @@unique([userId, seasonId, weekNumber])
 }
 
 model Team {
