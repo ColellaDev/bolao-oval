@@ -25,7 +25,7 @@ export function GameCard({ game, palpite, onPalpite, disabled  }: GameCardProps)
             key={competitor.team.id}
             type="button"
             disabled={disabled} 
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-bold border shadow-md transition-all
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-bold border shadow-md transition-all cursor-pointer disabled:cursor-not-allowed
               ${
                 palpite === competitor.team.id
                   ? 'bg-primary border-primary-hover text-white disabled:opacity-80'
