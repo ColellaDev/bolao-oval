@@ -11,7 +11,7 @@ interface GameCardProps {
 
 export function GameCard({ game, palpite, onPalpite, disabled  }: GameCardProps) {
   return (
-    <div key={game.id} className="bg-zinc-700 rounded-lg p-4">
+    <div key={game.id} className="bg-surface rounded-lg p-4">
       <p className="text-lg font-semibold mb-1 text-center">{game.name}</p>
       <p className="text-xs text-zinc-400 mb-3 text-center">
         {new Date(game.date).toLocaleString('pt-BR', {
@@ -28,7 +28,7 @@ export function GameCard({ game, palpite, onPalpite, disabled  }: GameCardProps)
             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg font-bold border shadow-md transition-all
               ${
                 palpite === competitor.team.id
-                  ? 'bg-blue-600 border-blue-700 text-white disabled:opacity-80'
+                  ? 'bg-primary border-primary-hover text-white disabled:opacity-80'
                   : 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300 disabled:bg-zinc-500 disabled:text-zinc-400'
               }`}
             onClick={() => onPalpite(game.id, competitor.team.id)}
