@@ -22,7 +22,7 @@ Content-Type: application/json
 ### 🚪 Logout
 POST http://localhost:3000/api/logout
 
-### Calcular Pontos
+### Calcular Pontos da Semana
 POST http://localhost:3000/api/scoring/calculate
 Content-Type: application/json
 
