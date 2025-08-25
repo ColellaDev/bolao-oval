@@ -30,3 +30,6 @@ Content-Type: application/json
   "seasonId": 2025,
   "weekNumber": 1
 }
+
+### Ingest Games ESPN
+POST http://localhost:3000/api/ingest-games
