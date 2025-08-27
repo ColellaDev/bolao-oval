@@ -65,15 +65,15 @@ export function GeneralRanking() {
   }
 
   return (
-    <div className="mb-16 w-full max-w-xl mx-auto rounded-xl border-2 border-surface bg-surface/30 p-6 shadow-lg">
+    <div className="mb-16 max-w-xl rounded-xl border-2 border-surface bg-surface/30 p-6 shadow-lg">
       <h2 className="mb-6 text-center text-3xl font-bold text-text">
-        Ranking Geral de Títulos
+        Ranking de Títulos
       </h2>
       <ol className="space-y-4">
         {winnersWithRank.map((winner) => (
           <li
             key={winner.name}
-            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-10"
           >
             <div className="flex items-center gap-4">
               <span

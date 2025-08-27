@@ -24,8 +24,8 @@ export function Header() {
         </Link>
         {user && (
           <nav className="hidden md:flex items-center gap-14">
-            <Link href="/bets" className={`text-sm hover:text-primary transition-colors ${pathname === '/bets' ? 'text-primary font-bold' : 'text-muted'}`}>Apostas</Link>
-            <Link href="/ranking" className={`text-sm hover:text-primary transition-colors ${pathname === '/ranking' ? 'text-primary font-bold' : 'text-muted'}`}>Ranking</Link>
+            <Link href="/bets" className={`text-xl hover:text-primary transition-colors ${pathname === '/bets' ? 'text-primary font-bold' : 'text-muted'}`}>Apostas</Link>
+            <Link href="/ranking" className={`text-xl hover:text-primary transition-colors ${pathname === '/ranking' ? 'text-primary font-bold' : 'text-muted'}`}>Ranking</Link>
           </nav>
         )}
       </div>
