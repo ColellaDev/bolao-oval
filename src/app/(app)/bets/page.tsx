@@ -35,9 +35,11 @@ export default function BetFormPage() {
 
         setGames(data.events)
         setWeek(data.week)
-      } catch (err: any) {
-        setError(err.message || 'Ocorreu um erro desconhecido.')
-        toast.error(err.message || 'Ocorreu um erro desconhecido.')
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'Ocorreu um erro desconhecido.'
+        setError(message)
+        toast.error(message)
       } finally {
         setLoading(false)
       }
@@ -68,8 +70,12 @@ export default function BetFormPage() {
           setPalpites(existingPalpites)
           setHasSubmitted(true)
         }
-      } catch (err: any) {
-        toast.error(err.message || 'Erro ao carregar seus palpites.')
+      } catch (err) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : 'Erro ao carregar seus palpites.'
+        toast.error(message)
       }
     }
 
@@ -127,8 +133,12 @@ export default function BetFormPage() {
 
       toast.success('Apostas enviadas com sucesso!')
       setHasSubmitted(true)
-    } catch (err: any) {
-      toast.error(err.message || 'Ocorreu um erro ao enviar suas apostas.')
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Ocorreu um erro ao enviar suas apostas.'
+      toast.error(message)
     } finally {
       setIsSubmitting(false)
     }
@@ -178,7 +188,7 @@ export default function BetFormPage() {
             </button>
           ) : (
             <p className="text-center text-sm text-green-400 font-semibold">
-              Suas apostas da rodada "{week?.name}" já foram enviadas!
+              Suas apostas da rodada {week?.name} já foram enviadas!
             </p>
           )}
         </form>

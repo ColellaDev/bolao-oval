@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
     try {
       await jose.jwtVerify(token, secret)
       return NextResponse.redirect(new URL('/', request.url))
-    } catch (error) {
+    } catch {
     }
   }
 

@@ -57,9 +57,9 @@ export default function RankingPage() {
 
         const data: RankingData = await response.json()
         setRankingData(data)
-      } catch (err: any) {
+      } catch (err) {
         const errorMessage =
-          err.message || 'Ocorreu um erro desconhecido ao carregar o ranking.'
+          err instanceof Error ? err.message : 'Ocorreu um erro desconhecido ao carregar o ranking.'
         setError(errorMessage)
         toast.error(errorMessage)
       } finally {

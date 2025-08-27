@@ -51,8 +51,10 @@ export function RegisterForm() {
       }
       toast.success('Cadastro realizado com sucesso!')
       router.push('/login')
-    } catch (err: any) {
-      toast.error(err.message || 'Ocorreu um erro ao cadastrar.')
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Ocorreu um erro ao cadastrar.'
+      toast.error(message)
     }
   }
 

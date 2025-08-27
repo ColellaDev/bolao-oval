@@ -47,8 +47,10 @@ export function LoginForm() {
       login(user)
       toast.success('Login realizado com sucesso!')
       router.push('/')
-    } catch (err: any) {
-      toast.error(err.message || 'Erro ao fazer login')
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Ocorreu um erro desconhecido.'
+      toast.error(message)
     }
   }
 
