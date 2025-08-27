@@ -41,7 +41,7 @@ export function Header() {
           <span className="text-sm text-muted">Olá, <strong>{user.name}</strong></span>
           <button
             onClick={logout}
-            className="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-1.5 rounded-lg transition-colors"
+            className="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-1.5 rounded-lg transition-colors cursor-pointer"
           >
             Sair
           </button>
