@@ -63,10 +63,13 @@ export default function BetFormPage() {
         }
         const data = await response.json()
         if (data.bets && data.bets.length > 0) {
-          const existingPalpites = data.bets.reduce((acc: any, bet: any) => {
-            acc[bet.gameId] = bet.choiceId
-            return acc
-          }, {})
+          const existingPalpites = data.bets.reduce(
+            (acc: Record<string, string>, bet: { gameId: string; choiceId: string }) => {
+              acc[bet.gameId] = bet.choiceId
+              return acc
+            },
+            {},
+          )
           setPalpites(existingPalpites)
           setHasSubmitted(true)
         }
