@@ -1,6 +1,6 @@
-import { GeneralRanking } from '@/components/GeneralRanking'
-import { PodiumPerSeason } from '@/components/PodiumPerSeason'
-import { StickerRanking } from '@/components/StickerRanking'
+import { GeneralRanking } from '@/components/HallOfFame/GeneralRanking'
+import { PodiumPerSeason } from '@/components/HallOfFame/PodiumPerSeason'
+import { StickerRanking } from '@/components/HallOfFame/StickerRanking'
 
 export default function Home() {
   return (

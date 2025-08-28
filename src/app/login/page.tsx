@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Logo from '@/assets/Logo.png'
-import { LoginForm } from '@/components/LoginForm'
+import { LoginForm } from '@/components/Forms/LoginForm'
 
 export default function LoginPage() {
   return (
