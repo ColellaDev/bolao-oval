@@ -58,7 +58,7 @@ export function StickerRanking() {
         {winnersWithRank.map((winner) => (
           <li
             key={winner.name}
-            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-muted/10"
           >
             <div className="flex items-center gap-4">
               <span

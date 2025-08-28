@@ -48,7 +48,7 @@ export function GeneralRanking() {
     if (rank === 1) return 'text-yellow-400'
     if (rank === 2) return 'text-zinc-400'
     if (rank === 3) return 'text-yellow-600'
-    return 'text-primary'
+    return 'text-text'
   }
 
   const trophyColors: { [key: number]: string } = {
@@ -73,7 +73,7 @@ export function GeneralRanking() {
         {winnersWithRank.map((winner) => (
           <li
             key={winner.name}
-            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-10"
+            className="flex flex-col items-start gap-2 rounded-lg bg-surface p-4 shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-10 transition-colors hover:bg-muted/10"
           >
             <div className="flex items-center gap-4">
               <span
@@ -85,7 +85,7 @@ export function GeneralRanking() {
               </span>
               <p className="text-xl font-medium">{winner.name}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-14 sm:pl-0">
+            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2 sm:pl-0">
               {renderTrophies(winner.podiums[1], 1)}
               {renderTrophies(winner.podiums[2], 2)}
               {renderTrophies(winner.podiums[3], 3)}

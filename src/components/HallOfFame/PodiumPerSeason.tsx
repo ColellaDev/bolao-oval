@@ -4,7 +4,7 @@ import { Sticker} from 'lucide-react'
 export function PodiumPerSeason() {
 
     return (
-    <>
+    <div className="mx-auto w-full max-w-7xl">
         <h2 className="mb-10 mt-16 text-center text-4xl font-bold text-text">
           Pódios por Temporada
         </h2>
@@ -67,6 +67,6 @@ export function PodiumPerSeason() {
             )
           })}
         </div>
-    </>
+    </div>
     )
 }

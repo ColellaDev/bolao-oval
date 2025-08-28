@@ -17,6 +17,8 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 2, name: 'Lele', score: 155 },
       { place: 3, name: 'Destro', score: 153 },
       { place: 'adesivo', name: 'Marcos', score: 141 },
+      { place: 4, name: 'TESTE 4', score: 141 },
+      { place: 5, name: 'TESTE 5', score: 141 },
     ],
   },
   {
