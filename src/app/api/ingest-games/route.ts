@@ -40,12 +40,24 @@ const espnResponseSchema = z.object({
   events: z.array(gameSchema),
 })
 
-export async function POST() {
+const ingestBodySchema = z.object({
+  week: z.number().optional(),
+  season: z.number().optional(),
+})
+
+export async function POST(request: Request) {
   try {
-    const response = await fetch(
+    const body = await request.json().catch(() => ({}))
+    const { week: requestedWeek, season: requestedSeason } =
+      ingestBodySchema.parse(body)
+
+    const url = new URL(
       'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard',
-      { next: { revalidate: 3600 } }, 
     )
+    if (requestedWeek) url.searchParams.append('week', String(requestedWeek))
+    if (requestedSeason) url.searchParams.append('year', String(requestedSeason))
+
+    const response = await fetch(url.toString(), { next: { revalidate: 3600 } })
 
     if (!response.ok) {
       throw new Error('Falha ao buscar dados da ESPN.')
@@ -59,16 +71,6 @@ export async function POST() {
     const seasonId = season.year
     const { number: weekNumber, text: weekText } = week
     const weekName = weekText || `Semana ${weekNumber}`
-
-    const teamsMap = new Map<string, z.infer<typeof teamSchema>>()
-    for (const event of events) {
-      for (const competitor of event.competitions[0].competitors) {
-        if (!teamsMap.has(competitor.team.id)) {
-          teamsMap.set(competitor.team.id, competitor.team)
-        }
-      }
-    }
-    const uniqueTeams = Array.from(teamsMap.values())
 
     await prisma.$transaction(
       async (tx) => {
@@ -86,16 +88,6 @@ export async function POST() {
             create: { number: weekNumber, name: weekName, seasonId },
           }),
         )
-
-        for (const team of uniqueTeams) {
-          transactionPromises.push(
-            tx.team.upsert({
-              where: { id: team.id },
-              update: { ...team },
-              create: { ...team },
-            }),
-          )
-        }
 
         for (const event of events) {
           const [home, away] = event.competitions[0].competitors

@@ -33,3 +33,8 @@ Content-Type: application/json
 
 ### Ingest Games ESPN
 POST http://localhost:3000/api/ingest-games
+Content-Type: application/json
+
+{
+  "week": 2
+}
