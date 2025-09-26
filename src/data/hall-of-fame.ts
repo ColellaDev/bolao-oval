@@ -1,7 +1,8 @@
 export interface Winner {
-  place: number | 'adesivo'
+  place: number
   name: string
   score: number
+  adesivo?: boolean
 }
 
 export interface BolaoSeason {
@@ -18,7 +19,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 3, name: 'Destro', score: 153 },
       { place: 4, name: 'Caco', score: 144 },
       { place: 5, name: 'Raoni', score: 144 },
-      { place: 'adesivo', name: 'Marcos', score: 143 },
+      { place: 6, name: 'Marcos', score: 143, adesivo: true },
       { place: 7, name: 'R. Tripode', score: 138 },
       { place: 8, name: 'Du', score: 119 },
       { place: 9, name: 'Murillo', score: 33 },
@@ -33,7 +34,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 3, name: 'Destro', score: 182 },
       { place: 4, name: 'Raoni', score: 179 },
       { place: 5, name: 'Murillo', score: 172 },
-      { place: 'adesivo', name: 'R. Tripode', score: 170 },
+      { place: 6, name: 'R. Tripode', score: 170, adesivo: true },
       { place: 7, name: 'Pedrinho', score: 166 },
       { place: 8, name: 'Lele', score: 166 },
       { place: 9, name: 'Barone', score: 147 },
@@ -49,7 +50,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 3, name: 'Erick', score: 180 },
       { place: 4, name: 'Raoni', score: 180 },
       { place: 5, name: 'Lele', score: 173 },
-      { place: 'adesivo', name: 'Caco', score: 173 },
+      { place: 6, name: 'Caco', score: 173, adesivo: true },
       { place: 7, name: 'Thiago', score: 172 },
       { place: 8, name: 'Helder', score: 159 },
       { place: 9, name: 'Bob', score: 158 },
@@ -66,7 +67,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 3, name: 'Marcos', score: 180 },
       { place: 4, name: 'Raoni', score: 180 },
       { place: 5, name: 'Destro', score: 179 },
-      { place: 'adesivo', name: 'Yuri', score: 179 },
+      { place: 6, name: 'Yuri', score: 179, adesivo: true },
       { place: 7, name: 'Caco', score: 177 },
       { place: 8, name: 'Erick', score: 170 },
       { place: 9, name: 'Luis', score: 164 },
@@ -84,7 +85,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 3, name: 'Pedrinho', score: 179 },
       { place: 4, name: 'Destro', score: 178 },
       { place: 5, name: 'Raoni', score: 176 },
-      { place: 'adesivo', name: 'Lele', score: 176 },
+      { place: 6, name: 'Lele', score: 176, adesivo: true },
       { place: 7, name: 'Erick', score: 174 },
       { place: 8, name: 'Marcos', score: 172 },
       { place: 9, name: 'Luis', score: 171 },
@@ -103,7 +104,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 4, name: 'Destro', score: 191 },
       { place: 5, name: 'Caco', score: 190 },
       { place: 6, name: 'Peu', score: 190 },
-      { place: 'adesivo', name: 'Lele', score: 189 },
+      { place: 7, name: 'Lele', score: 189, adesivo: true },
       { place: 8, name: 'Raoni', score: 188 },
       { place: 9, name: 'Diego', score: 185 },
       { place: 10, name: 'Bruna', score: 184 },
@@ -122,7 +123,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 4, name: 'Erick', score: 189 },
       { place: 5, name: 'Luis', score: 187 },
       { place: 6, name: 'Caco', score: 187 },
-      { place: 'adesivo', name: 'Samir', score: 185 },
+      { place: 7, name: 'Samir', score: 185, adesivo: true },
       { place: 8, name: 'Igor', score: 183 },
       { place: 9, name: 'Filipe', score: 182 },
       { place: 10, name: 'Marcos', score: 181 },
@@ -142,7 +143,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 4, name: 'Rena', score: 188 },
       { place: 5, name: 'Helder', score: 187 },
       { place: 6, name: 'Erick', score: 185 },
-      { place: 'adesivo', name: 'Lele', score: 185 },
+      { place: 7, name: 'Lele', score: 185, adesivo: true },
       { place: 8, name: 'Destro', score: 184 },
       { place: 9, name: 'Diego', score: 183 },
       { place: 10, name: 'Raoni', score: 178 },
@@ -162,7 +163,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 4, name: 'Bruna', score: 187 },
       { place: 5, name: 'Rena', score: 186 },
       { place: 6, name: 'Helder', score: 184 },
-      { place: 'adesivo', name: 'Erick', score: 183 },
+      { place: 7, name: 'Erick', score: 183, adesivo: true },
       { place: 8, name: 'Caco', score: 182 },
       { place: 9, name: 'Raoni', score: 179 },
       { place: 10, name: 'Igor', score: 178 },
@@ -180,7 +181,7 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 4, name: 'Destro', score: 201 },
       { place: 5, name: 'Rena', score: 201 },
       { place: 6, name: 'Bruna', score: 200 },
-      { place: 'adesivo', name: 'Helder', score: 198 },
+      { place: 7, name: 'Helder', score: 198, adesivo: true },
       { place: 8, name: 'Lele', score: 197 },
       { place: 9, name: 'Igor', score: 192 },
       { place: 10, name: 'Erick', score: 192 },

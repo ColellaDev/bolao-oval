@@ -1,5 +1,5 @@
 import { GeneralRanking } from '@/components/HallOfFame/GeneralRanking'
-import { PodiumPerSeason } from '@/components/HallOfFame/PodiumPerSeason'
+import { RankingPerSeason } from '@/components/HallOfFame/RankingPerSeason'
 import { StickerRanking } from '@/components/HallOfFame/StickerRanking'
 import { TotalScore } from '@/components/HallOfFame/TotalScore'
 
@@ -16,7 +16,7 @@ export default function Home() {
           <GeneralRanking />
           <StickerRanking />
         </div>
-          <PodiumPerSeason />
+          <RankingPerSeason/>
       </div>
     </main>
   )

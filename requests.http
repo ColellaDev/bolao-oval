@@ -28,7 +28,7 @@ Content-Type: application/json
 
 {
   "seasonId": 2025,
-  "weekNumber": 2
+  "weekNumber": 4
 }
 
 ### Ingest Games ESPN
@@ -36,5 +36,5 @@ POST http://localhost:3000/api/ingest-games
 Content-Type: application/json
 
 {
-  "week": 3
+  "week": 4
 }

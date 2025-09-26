@@ -5,7 +5,7 @@ export function StickerRanking() {
   const stickerCounts = hallOfFameData.reduce(
     (acc, bolao) => {
       bolao.winners.forEach((winner) => {
-        if (winner.place === 'adesivo') {
+        if (winner.adesivo) {
           if (!acc[winner.name]) {
             acc[winner.name] = 0
           }
