@@ -26,6 +26,12 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-14">
             <Link href="/bets" className={`text-xl hover:text-primary transition-colors ${pathname === '/bets' ? 'text-primary font-bold' : 'text-muted'}`}>Apostas</Link>
             <Link href="/ranking" className={`text-xl hover:text-primary transition-colors ${pathname === '/ranking' ? 'text-primary font-bold' : 'text-muted'}`}>Ranking</Link>
+            {user.role === 'admin' && (
+              <Link
+                href="/admin"
+                className={`text-xl hover:text-primary transition-colors ${pathname.startsWith('/admin') ? 'text-primary font-bold' : 'text-muted'}`}
+              >Admin</Link>
+            )}
           </nav>
         )}
       </div>

@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     if (requestedWeek) url.searchParams.append('week', String(requestedWeek))
     if (requestedSeason) url.searchParams.append('year', String(requestedSeason))
 
-    const response = await fetch(url.toString(), { next: { revalidate: 3600 } })
+    const response = await fetch(url.toString(), { cache: 'no-store' })
 
     if (!response.ok) {
       throw new Error('Falha ao buscar dados da ESPN.')

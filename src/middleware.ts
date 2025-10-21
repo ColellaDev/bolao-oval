@@ -29,7 +29,17 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    await jose.jwtVerify(token, secret)
+    const { payload } = await jose.jwtVerify(token, secret)
+
+    const userRole = payload.role as string
+
+    if (pathname.startsWith('/admin') && userRole !== 'admin') {
+      const homeUrl = new URL('/', request.url)
+      // Opcional: Adicionar um parâmetro de erro para exibir uma mensagem na home.
+      // homeUrl.searchParams.set('error', 'unauthorized')
+      return NextResponse.redirect(homeUrl)
+    }
+
     return NextResponse.next()
   } catch (error) {
     console.error('Erro de verificação do JWT no middleware:', error)
