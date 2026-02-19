@@ -192,4 +192,23 @@ export const hallOfFameData: BolaoSeason[] = [
       { place: 15, name: 'R. Tripode', score: 116 },
     ],
   },
+  {
+    season: 'Bolão Oval XI - 2025',
+    winners: [
+      { place: 1, name: 'Pedrinho', score: 204 },
+      { place: 2, name: 'Raoni', score: 202 },
+      { place: 3, name: 'Marcos', score: 200 },
+      { place: 4, name: 'Destro', score: 198 },
+      { place: 5, name: 'Caco', score: 198 },
+      { place: 6, name: 'Lele', score: 195 },
+      { place: 7, name: 'Bruna', score: 192, adesivo: true },
+      { place: 8, name: 'Renan', score: 190 },
+      { place: 9, name: 'Igor', score: 189 },
+      { place: 10, name: 'Diego', score: 186 },
+      { place: 11, name: 'Régis', score: 184 },
+      { place: 12, name: 'Helder', score: 184 },
+      { place: 13, name: 'Mario', score: 178 },
+      { place: 14, name: 'Erick', score: 172 },
+    ],
+  },
 ]
