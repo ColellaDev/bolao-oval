@@ -1,74 +1,15 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { getCurrentGamesPayload } from '@/services/gamesService'
 
 export async function GET() {
   try {
-    const latestGameAndSeason = await prisma.game.findFirst({
-      orderBy: [
-        {
-          seasonId: 'desc',
-        },
-        {
-          weekNumber: 'desc',
-        },
-      ],
-    })
+    const payload = await getCurrentGamesPayload()
 
-    if (!latestGameAndSeason) {
-      return NextResponse.json(
-        {
-          events: [],
-          week: null,
-          error: 'Nenhum jogo encontrado no banco de dados.',
-        },
-        { status: 404 },
-      )
+    if (payload.error) {
+      return NextResponse.json(payload, { status: 404 })
     }
 
-    const { seasonId: currentSeasonId, weekNumber: currentWeekNumber } = latestGameAndSeason
-
-    const weekInfo = await prisma.week.findUnique({
-      where: {
-        seasonId_number: {
-          seasonId: currentSeasonId,
-          number: currentWeekNumber,
-        },
-      },
-    })
-
-    const gamesFromDb = await prisma.game.findMany({
-      where: {
-        seasonId: currentSeasonId,
-        weekNumber: currentWeekNumber,
-      },
-      include: {
-        homeTeam: true,
-        awayTeam: true,
-      },
-      orderBy: {
-        date: 'asc',
-      },
-    })
-
-    const formattedGames = gamesFromDb.map((game) => ({
-      id: game.id,
-      name: game.name,
-      date: game.date.toISOString(),
-      competitions: [
-        {
-          competitors: [{ team: game.homeTeam }, { team: game.awayTeam }],
-        },
-      ],
-      homeTeamScore: game.homeTeamScore,
-      awayTeamScore: game.awayTeamScore,
-      winnerTeamId: game.winnerTeamId,
-      status: game.status,
-    }))
-
-    return NextResponse.json({
-      events: formattedGames,
-      week: weekInfo,
-    })
+    return NextResponse.json(payload)
   } catch (error) {
     console.error('Erro ao buscar jogos do banco de dados:', error)
     return NextResponse.json(

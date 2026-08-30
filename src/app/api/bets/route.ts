@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import {
+  BetConflictError,
+  ValidationError,
+  createUserBetsForWeek,
+  getUserBetsForWeek,
+} from '@/services/betService'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -15,13 +20,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    const bets = await prisma.bet.findMany({
-      where: {
-        userId,
-        seasonId: parseInt(seasonId, 10),
-        weekNumber: parseInt(weekNumber, 10),
-      },
+    const bets = await getUserBetsForWeek({
+      userId,
+      seasonId: Number.parseInt(seasonId, 10),
+      weekNumber: Number.parseInt(weekNumber, 10),
     })
+
     return NextResponse.json({ bets })
   } catch (error) {
     console.error('Erro ao buscar apostas:', error)
@@ -34,58 +38,28 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId, seasonId, weekNumber, bets } = await request.json()
-
-    if (
-      !userId ||
-      !seasonId ||
-      !weekNumber ||
-      !Array.isArray(bets) ||
-      bets.length === 0
-    ) {
-      return NextResponse.json(
-        { error: 'Dados inválidos para aposta.' },
-        { status: 400 },
-      )
-    }
-
-    const existingBetsCount = await prisma.bet.count({
-      where: {
-        userId,
-        seasonId,
-        weekNumber,
-      },
-    })
-
-    if (existingBetsCount > 0) {
-      return NextResponse.json(
-        {
-          error:
-            'Você já enviou suas apostas para esta semana e não pode alterá-las.',
-        },
-        { status: 409 }, 
-      )
-    }
-
-    const betsToCreate = bets.map(
-      (bet: { gameId: string; choiceId: string }) => ({
-        userId,
-        seasonId,
-        weekNumber,
-        gameId: bet.gameId,
-        choiceId: bet.choiceId,
-      }),
-    )
-
-    await prisma.bet.createMany({
-      data: betsToCreate,
-    })
+    const payload = await request.json()
+    await createUserBetsForWeek(payload)
 
     return NextResponse.json(
       { message: 'Apostas criadas com sucesso' },
       { status: 201 },
     )
   } catch (error) {
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 },
+      )
+    }
+
+    if (error instanceof BetConflictError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 409 },
+      )
+    }
+
     console.error('Erro ao salvar aposta:', error)
     return NextResponse.json(
       { error: 'Erro interno no servidor' },
